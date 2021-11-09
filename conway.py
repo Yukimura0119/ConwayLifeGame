@@ -2,15 +2,15 @@ import pygame
 import random
 import asyncio
 import numpy
-from pygame.constants import KEYDOWN
 
 pygame.init()
-screen = pygame.display.set_mode([512, 512])
+screen = pygame.display.set_mode([1024, 1024])
 screen.fill([0, 0, 0])
 life = numpy.zeros([64, 64])
 
 direction = [(1, 0), (0, 1), (1, 1), (-1, 0),
              (0, -1), (-1, -1), (-1, 1), (1, -1)]
+clock = pygame.time.Clock()
 born = []
 dead = []
 flag = True
@@ -20,21 +20,26 @@ pause = True
 def process_born():
     for i in born:
         life[i[0]][i[1]] = True
-        screen.fill([70, 130, 180], ([i[0]*8, i[1]*8], (8, 8)))
+        screen.fill([70, 130, 180], ([i[0]*16, i[1]*16], (16, 16)))
     born.clear()
 
 
 def process_dead():
     for i in dead:
         life[i[0]][i[1]] = False
-        screen.fill([0, 0, 0], ([i[0]*8, i[1]*8], (8, 8)))
+        screen.fill([0, 0, 0], ([i[0]*16, i[1]*16], (16, 16)))
     dead.clear()
 
 
-clock = pygame.time.Clock()
+def clear():
+    global life
+    born.clear()
+    dead.clear()
+    screen.fill([0, 0, 0])
+    life = numpy.zeros([64, 64])
+
 
 a = [i for i in range(64)]
-
 for i in range(64):
     b = random.sample(a, random.randint(10, 40))
     for j in b:
@@ -48,8 +53,10 @@ while flag:
             flag = False
         if event.type == pygame.KEYDOWN and event.key == pygame.K_p:
             pause = True
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_c:
+            clear()
         if event.type == pygame.MOUSEBUTTONDOWN:
-            born.append((event.pos[0]//8, event.pos[1]//8))
+            born.append((event.pos[0]//16, event.pos[1]//16))
 
     while pause == True:
         for event in pygame.event.get():
@@ -57,8 +64,10 @@ while flag:
                 quit()
             if event.type == pygame.KEYDOWN and event.key == pygame.K_p:
                 pause = False
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_c:
+                clear()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                born.append((event.pos[0]//8, event.pos[1]//8))
+                born.append((event.pos[0]//16, event.pos[1]//16))
                 process_born()
         pygame.display.update()
 
