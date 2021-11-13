@@ -2,7 +2,7 @@ import pygame
 import random
 import numpy
 
-# 設定視窗及初始化
+# Set up screen and init
 pygame.init()
 screen = pygame.display.set_mode([1024, 1024])
 screen.fill([0, 0, 0])
@@ -13,29 +13,27 @@ dead = []
 flag = True
 pause = True
 
-# 記下8個方向
+# 8 direction to cell
 direction = [(1, 0), (0, 1), (1, 1), (-1, 0),
              (0, -1), (-1, -1), (-1, 1), (1, -1)]
 
-# 處理將要復活的細胞
 
-
+# process the will-born list
 def process_born():
     for i in born:
         life[i[0]][i[1]] = True
         screen.fill([70, 130, 180], ([i[0]*16, i[1]*16], (16, 16)))
     born.clear()
 
-# 處理將要死亡的細胞
 
-
+# process the will-dead list
 def process_dead():
     for i in dead:
         life[i[0]][i[1]] = False
         screen.fill([0, 0, 0], ([i[0]*16, i[1]*16], (16, 16)))
     dead.clear()
 
-# 默示錄，清除所有細胞
+# clear all the cells
 
 
 def clear():
@@ -46,7 +44,7 @@ def clear():
     life = numpy.zeros([64, 64])
 
 
-# 開始的時候隨機產生細胞
+# generate a lot of cells when game starts
 a = [i for i in range(64)]
 for i in range(64):
     b = random.sample(a, random.randint(10, 40))
@@ -55,7 +53,7 @@ for i in range(64):
 process_born()
 
 while flag:
-    # 1秒更新三次
+    # update 3 times in a second
     clock.tick(3)
 
     for event in pygame.event.get():
@@ -65,7 +63,7 @@ while flag:
             pause = True
         if event.type == pygame.KEYDOWN and event.key == pygame.K_c:
             clear()
-        # 處理滑鼠點擊事件
+        # process the mouse-click event
         if event.type == pygame.MOUSEBUTTONDOWN:
             x = event.pos[0]//16
             y = event.pos[1]//16
@@ -74,7 +72,7 @@ while flag:
             else:
                 born.append((x, y))
 
-    # 暫停的時候會被鎖在這個迴圈
+    # when paused, the program would stuck in the while loop
     while pause == True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -90,12 +88,12 @@ while flag:
                     dead.append((x, y))
                 else:
                     born.append((x, y))
-        # 處理復活及死亡
+        # procees born and dead
         process_born()
         process_dead()
         pygame.display.update()
 
-    # 找到所有符合死亡及復活條件的細胞，分別丟入dead,born兩個串列
+    # Find all the cell that would dead or born, and add them to the born and dead list
     for i in range(64):
         for j in range(64):
             cnt = 0
@@ -108,7 +106,7 @@ while flag:
             else:
                 if cnt == 3:
                     born.append((i, j))
-    # 處理復活及死亡
+    # process born and dead
     process_born()
     process_dead()
     pygame.display.update()
