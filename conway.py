@@ -1,3 +1,4 @@
+from types import prepare_class
 import pygame
 import random
 import asyncio
@@ -56,7 +57,12 @@ while flag:
         if event.type == pygame.KEYDOWN and event.key == pygame.K_c:
             clear()
         if event.type == pygame.MOUSEBUTTONDOWN:
-            born.append((event.pos[0]//16, event.pos[1]//16))
+            x = event.pos[0]//16
+            y = event.pos[1]//16
+            if life[x][y]:
+                dead.append((x, y))
+            else:
+                born.append((x, y))
 
     while pause == True:
         for event in pygame.event.get():
@@ -67,8 +73,14 @@ while flag:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_c:
                 clear()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                born.append((event.pos[0]//16, event.pos[1]//16))
-                process_born()
+                x = event.pos[0]//16
+                y = event.pos[1]//16
+                if life[x][y]:
+                    dead.append((x, y))
+                else:
+                    born.append((x, y))
+        process_born()
+        process_dead()
         pygame.display.update()
 
     for i in range(64):
