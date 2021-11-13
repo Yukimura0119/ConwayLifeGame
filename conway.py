@@ -33,9 +33,8 @@ def process_dead():
         screen.fill([0, 0, 0], ([i[0]*16, i[1]*16], (16, 16)))
     dead.clear()
 
+
 # clear all the cells
-
-
 def clear():
     global life
     born.clear()
@@ -56,6 +55,7 @@ while flag:
     # update 3 times in a second
     clock.tick(3)
 
+    # detect key event
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             flag = False
@@ -63,17 +63,11 @@ while flag:
             pause = True
         if event.type == pygame.KEYDOWN and event.key == pygame.K_c:
             clear()
-        # process the mouse-click event
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            x = event.pos[0]//16
-            y = event.pos[1]//16
-            if life[x][y]:
-                dead.append((x, y))
-            else:
-                born.append((x, y))
 
     # when paused, the program would stuck in the while loop
     while pause == True:
+
+        # detect key event
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 quit()
@@ -81,13 +75,19 @@ while flag:
                 pause = False
             if event.type == pygame.KEYDOWN and event.key == pygame.K_c:
                 clear()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                x = event.pos[0]//16
-                y = event.pos[1]//16
-                if life[x][y]:
-                    dead.append((x, y))
-                else:
-                    born.append((x, y))
+
+        # detect mouse press
+        if pygame.mouse.get_pressed()[0]:
+            x = pygame.mouse.get_pos()[0]//16
+            y = pygame.mouse.get_pos()[1]//16
+            if life[x, y] == 0:
+                born.append([x, y])
+        if pygame.mouse.get_pressed()[2]:
+            x = pygame.mouse.get_pos()[0]//16
+            y = pygame.mouse.get_pos()[1]//16
+            if life[x, y] == 1:
+                dead.append([x, y])
+
         # procees born and dead
         process_born()
         process_dead()
@@ -106,8 +106,10 @@ while flag:
             else:
                 if cnt == 3:
                     born.append((i, j))
+
     # process born and dead
     process_born()
     process_dead()
     pygame.display.update()
+
 pygame.quit()
