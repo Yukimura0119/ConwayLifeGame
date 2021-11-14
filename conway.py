@@ -2,17 +2,22 @@ import pygame
 import random
 import numpy
 
-# Set up screen and init
-pixel = 16
-ScreenSize = [1024, 1024]
+# Set up screen
+factor = 1
+pixel = 16//factor
+scale = 64*factor
+fps = 3
+# set up color
 BgColor = [0, 0, 0]
 CellColor = [70, 130, 180]
 
-LifeSize = [ScreenSize[0]//pixel, ScreenSize[1]//pixel]
+# init
+ScreenSize = [pixel*scale, pixel*scale]
+LifeSize = [scale, scale]
 pygame.init()
 screen = pygame.display.set_mode(ScreenSize)
 screen.fill(BgColor)
-life = numpy.zeros([ScreenSize[0]//pixel, ScreenSize[1]//pixel])
+life = numpy.zeros([scale, scale])
 clock = pygame.time.Clock()
 born = []
 dead = []
@@ -52,16 +57,16 @@ def clear():
 
 
 # generate a lot of cells when game starts
-a = [i for i in range(LifeSize[0])]
-for i in range(LifeSize[1]):
-    b = random.sample(a, random.randint(LifeSize[1]//3, LifeSize[1]*2//3))
+a = [i for i in range(scale)]
+for i in range(scale):
+    b = random.sample(a, random.randint(scale//3, scale*2//3))
     for j in b:
         born.append([i, j])
 process_born()
 
 while flag:
     # update 3 times in a second
-    clock.tick(3)
+    clock.tick(fps)
 
     # detect key event
     for event in pygame.event.get():
@@ -101,8 +106,8 @@ while flag:
         pygame.display.update()
 
     # Find all the cell that would dead or born, and add them to the born and dead list
-    for i in range(LifeSize[0]):
-        for j in range(LifeSize[1]):
+    for i in range(scale):
+        for j in range(scale):
             cnt = 0
             for d in direction:
                 if life[(i+d[0]+LifeSize[0]) % LifeSize[0], (j+d[1]+LifeSize[1]) % LifeSize[1]]:
