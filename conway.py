@@ -3,10 +3,10 @@ import random
 import numpy
 
 # Set up screen
-factor = 1
+factor = 2
 pixel = 16//factor
 scale = 64*factor
-fps = 3
+fps = 120
 # set up color
 BgColor = [60, 60, 60]
 CellColor = [252, 201, 185]
@@ -52,7 +52,7 @@ def clear():
     global life
     born.clear()
     dead.clear()
-    screen.fill([0, 0, 0])
+    screen.fill(BgColor)
     life = numpy.zeros(LifeSize)
 
 
