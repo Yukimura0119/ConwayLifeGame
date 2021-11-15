@@ -8,8 +8,8 @@ pixel = 16//factor
 scale = 64*factor
 fps = 3
 # set up color
-BgColor = [0, 0, 0]
-CellColor = [70, 130, 180]
+BgColor = [60, 60, 60]
+CellColor = [252, 201, 185]
 
 # init
 ScreenSize = [pixel*scale, pixel*scale]
