@@ -3,10 +3,10 @@ import random
 import numpy
 
 # Set up screen
-factor = 2
+factor = 1
 pixel = 16//factor
 scale = 64*factor
-fps = 120
+fps = 3
 # set up color
 BgColor = [60, 60, 60]
 CellColor = [252, 201, 185]
